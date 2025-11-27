@@ -1,0 +1,857 @@
+=== NBA API PLATINUM SCHEMA MAP ===
+Generated for Season: 2023-24
+=======================================
+
+   > Pinging Player Info...
+
+### [PROFILE] PLAYER INFO - Table 0 ###
+Row Count: 1
+Columns & Data Types:
+  - PERSON_ID: int64
+  - FIRST_NAME: object
+  - LAST_NAME: object
+  - DISPLAY_FIRST_LAST: object
+  - DISPLAY_LAST_COMMA_FIRST: object
+  - DISPLAY_FI_LAST: object
+  - PLAYER_SLUG: object
+  - BIRTHDATE: object
+  - SCHOOL: object
+  - COUNTRY: object
+  - LAST_AFFILIATION: object
+  - HEIGHT: object
+  - WEIGHT: object
+  - SEASON_EXP: int64
+  - JERSEY: object
+  - POSITION: object
+  - ROSTERSTATUS: object
+  - GAMES_PLAYED_CURRENT_SEASON_FLAG: object
+  - TEAM_ID: int64
+  - TEAM_NAME: object
+  - TEAM_ABBREVIATION: object
+  - TEAM_CODE: object
+  - TEAM_CITY: object
+  - PLAYERCODE: object
+  - FROM_YEAR: int64
+  - TO_YEAR: int64
+  - DLEAGUE_FLAG: object
+  - NBA_FLAG: object
+  - GAMES_PLAYED_FLAG: object
+  - DRAFT_YEAR: object
+  - DRAFT_ROUND: object
+  - DRAFT_NUMBER: object
+  - GREATEST_75_FLAG: object
+----------------------------------------
+
+### [PROFILE] PLAYER INFO - Table 1 ###
+Row Count: 1
+Columns & Data Types:
+  - PLAYER_ID: int64
+  - PLAYER_NAME: object
+  - TimeFrame: object
+  - PTS: float64
+  - AST: float64
+  - REB: float64
+  - PIE: int64
+----------------------------------------
+
+### [PROFILE] PLAYER INFO - Table 2 ###
+Row Count: 87
+Columns & Data Types:
+  - SEASON_ID: object
+----------------------------------------
+   > Pinging Scoreboard...
+
+### [GAME] SCOREBOARD - Table 0 ###
+Row Count: 1
+Columns & Data Types:
+  - GAME_DATE_EST: object
+  - GAME_SEQUENCE: int64
+  - GAME_ID: object
+  - GAME_STATUS_ID: int64
+  - GAME_STATUS_TEXT: object
+  - GAMECODE: object
+  - HOME_TEAM_ID: int64
+  - VISITOR_TEAM_ID: int64
+  - SEASON: object
+  - LIVE_PERIOD: int64
+  - LIVE_PC_TIME: object
+  - NATL_TV_BROADCASTER_ABBREVIATION: object
+  - HOME_TV_BROADCASTER_ABBREVIATION: object
+  - AWAY_TV_BROADCASTER_ABBREVIATION: object
+  - LIVE_PERIOD_TIME_BCAST: object
+  - ARENA_NAME: object
+  - WH_STATUS: int64
+  - WNBA_COMMISSIONER_FLAG: int64
+----------------------------------------
+
+### [GAME] SCOREBOARD - Table 1 ###
+Row Count: 0
+Columns & Data Types:
+  - GAME_DATE_EST: object
+  - GAME_SEQUENCE: object
+  - GAME_ID: object
+  - TEAM_ID: object
+  - TEAM_ABBREVIATION: object
+  - TEAM_CITY_NAME: object
+  - TEAM_NAME: object
+  - TEAM_WINS_LOSSES: object
+  - PTS_QTR1: object
+  - PTS_QTR2: object
+  - PTS_QTR3: object
+  - PTS_QTR4: object
+  - PTS_OT1: object
+  - PTS_OT2: object
+  - PTS_OT3: object
+  - PTS_OT4: object
+  - PTS_OT5: object
+  - PTS_OT6: object
+  - PTS_OT7: object
+  - PTS_OT8: object
+  - PTS_OT9: object
+  - PTS_OT10: object
+  - PTS: object
+  - FG_PCT: object
+  - FT_PCT: object
+  - FG3_PCT: object
+  - AST: object
+  - REB: object
+  - TOV: object
+----------------------------------------
+
+### [GAME] SCOREBOARD - Table 2 ###
+Row Count: 1
+Columns & Data Types:
+  - GAME_ID: object
+  - HOME_TEAM_ID: int64
+  - VISITOR_TEAM_ID: int64
+  - GAME_DATE_EST: object
+  - HOME_TEAM_WINS: int64
+  - HOME_TEAM_LOSSES: int64
+  - SERIES_LEADER: object
+----------------------------------------
+
+### [GAME] SCOREBOARD - Table 3 ###
+Row Count: 1
+Columns & Data Types:
+  - GAME_ID: object
+  - LAST_GAME_ID: object
+  - LAST_GAME_DATE_EST: object
+  - LAST_GAME_HOME_TEAM_ID: int64
+  - LAST_GAME_HOME_TEAM_CITY: object
+  - LAST_GAME_HOME_TEAM_NAME: object
+  - LAST_GAME_HOME_TEAM_ABBREVIATION: object
+  - LAST_GAME_HOME_TEAM_POINTS: int64
+  - LAST_GAME_VISITOR_TEAM_ID: int64
+  - LAST_GAME_VISITOR_TEAM_CITY: object
+  - LAST_GAME_VISITOR_TEAM_NAME: object
+  - LAST_GAME_VISITOR_TEAM_CITY1: object
+  - LAST_GAME_VISITOR_TEAM_POINTS: int64
+----------------------------------------
+
+### [GAME] SCOREBOARD - Table 4 ###
+Row Count: 15
+Columns & Data Types:
+  - TEAM_ID: int64
+  - LEAGUE_ID: object
+  - SEASON_ID: object
+  - STANDINGSDATE: object
+  - CONFERENCE: object
+  - TEAM: object
+  - G: int64
+  - W: int64
+  - L: int64
+  - W_PCT: float64
+  - HOME_RECORD: object
+  - ROAD_RECORD: object
+----------------------------------------
+
+### [GAME] SCOREBOARD - Table 5 ###
+Row Count: 15
+Columns & Data Types:
+  - TEAM_ID: int64
+  - LEAGUE_ID: object
+  - SEASON_ID: object
+  - STANDINGSDATE: object
+  - CONFERENCE: object
+  - TEAM: object
+  - G: int64
+  - W: int64
+  - L: int64
+  - W_PCT: float64
+  - HOME_RECORD: object
+  - ROAD_RECORD: object
+----------------------------------------
+
+### [GAME] SCOREBOARD - Table 6 ###
+Row Count: 1
+Columns & Data Types:
+  - GAME_ID: object
+  - PT_AVAILABLE: int64
+----------------------------------------
+
+### [GAME] SCOREBOARD - Table 7 ###
+Row Count: 2
+Columns & Data Types:
+  - GAME_ID: object
+  - TEAM_ID: int64
+  - TEAM_CITY: object
+  - TEAM_NICKNAME: object
+  - TEAM_ABBREVIATION: object
+  - PTS_PLAYER_ID: int64
+  - PTS_PLAYER_NAME: object
+  - PTS: int64
+  - REB_PLAYER_ID: int64
+  - REB_PLAYER_NAME: object
+  - REB: int64
+  - AST_PLAYER_ID: int64
+  - AST_PLAYER_NAME: object
+  - AST: int64
+----------------------------------------
+
+### [GAME] SCOREBOARD - Table 8 ###
+Row Count: 0
+Columns & Data Types:
+  - GAME_ID: object
+  - LEAG_TIX: object
+----------------------------------------
+   > Pinging Traditional V3...
+
+### [BOXSCORE] TRADITIONAL V3 - Table 0 ###
+Row Count: 27
+Columns & Data Types:
+  - gameId: object
+  - teamId: int64
+  - teamCity: object
+  - teamName: object
+  - teamTricode: object
+  - teamSlug: object
+  - personId: int64
+  - firstName: object
+  - familyName: object
+  - nameI: object
+  - playerSlug: object
+  - position: object
+  - comment: object
+  - jerseyNum: object
+  - minutes: object
+  - fieldGoalsMade: int64
+  - fieldGoalsAttempted: int64
+  - fieldGoalsPercentage: float64
+  - threePointersMade: int64
+  - threePointersAttempted: int64
+  - threePointersPercentage: float64
+  - freeThrowsMade: int64
+  - freeThrowsAttempted: int64
+  - freeThrowsPercentage: float64
+  - reboundsOffensive: int64
+  - reboundsDefensive: int64
+  - reboundsTotal: int64
+  - assists: int64
+  - steals: int64
+  - blocks: int64
+  - turnovers: int64
+  - foulsPersonal: int64
+  - points: int64
+  - plusMinusPoints: float64
+----------------------------------------
+
+### [BOXSCORE] TRADITIONAL V3 - Table 1 ###
+Row Count: 4
+Columns & Data Types:
+  - gameId: object
+  - teamId: int64
+  - teamCity: object
+  - teamName: object
+  - teamTricode: object
+  - teamSlug: object
+  - minutes: object
+  - fieldGoalsMade: int64
+  - fieldGoalsAttempted: int64
+  - fieldGoalsPercentage: float64
+  - threePointersMade: int64
+  - threePointersAttempted: int64
+  - threePointersPercentage: float64
+  - freeThrowsMade: int64
+  - freeThrowsAttempted: int64
+  - freeThrowsPercentage: float64
+  - reboundsOffensive: int64
+  - reboundsDefensive: int64
+  - reboundsTotal: int64
+  - assists: int64
+  - steals: int64
+  - blocks: int64
+  - turnovers: int64
+  - foulsPersonal: int64
+  - points: int64
+  - startersBench: object
+----------------------------------------
+
+### [BOXSCORE] TRADITIONAL V3 - Table 2 ###
+Row Count: 2
+Columns & Data Types:
+  - gameId: object
+  - teamId: int64
+  - teamCity: object
+  - teamName: object
+  - teamTricode: object
+  - teamSlug: object
+  - minutes: object
+  - fieldGoalsMade: int64
+  - fieldGoalsAttempted: int64
+  - fieldGoalsPercentage: float64
+  - threePointersMade: int64
+  - threePointersAttempted: int64
+  - threePointersPercentage: float64
+  - freeThrowsMade: int64
+  - freeThrowsAttempted: int64
+  - freeThrowsPercentage: float64
+  - reboundsOffensive: int64
+  - reboundsDefensive: int64
+  - reboundsTotal: int64
+  - assists: int64
+  - steals: int64
+  - blocks: int64
+  - turnovers: int64
+  - foulsPersonal: int64
+  - points: int64
+  - plusMinusPoints: float64
+----------------------------------------
+   > Pinging Play By Play V3...
+
+### [EVENTS] PLAY BY PLAY V3 - Table 0 ###
+Row Count: 536
+Columns & Data Types:
+  - gameId: object
+  - actionNumber: int64
+  - clock: object
+  - period: int64
+  - teamId: int64
+  - teamTricode: object
+  - personId: int64
+  - playerName: object
+  - playerNameI: object
+  - xLegacy: int64
+  - yLegacy: int64
+  - shotDistance: int64
+  - shotResult: object
+  - isFieldGoal: int64
+  - scoreHome: object
+  - scoreAway: object
+  - pointsTotal: int64
+  - location: object
+  - description: object
+  - actionType: object
+  - subType: object
+  - videoAvailable: int64
+  - shotValue: int64
+  - actionId: int64
+----------------------------------------
+
+### [EVENTS] PLAY BY PLAY V3 - Table 1 ###
+Row Count: 1
+Columns & Data Types:
+  - videoAvailable: int64
+----------------------------------------
+   > Pinging Player Hustle Stats...
+
+### [HUSTLE] PLAYER HUSTLE STATS - Table 0 ###
+Row Count: 567
+Columns & Data Types:
+  - PLAYER_ID: int64
+  - PLAYER_NAME: object
+  - TEAM_ID: int64
+  - TEAM_ABBREVIATION: object
+  - AGE: float64
+  - G: int64
+  - MIN: float64
+  - CONTESTED_SHOTS: int64
+  - CONTESTED_SHOTS_2PT: int64
+  - CONTESTED_SHOTS_3PT: int64
+  - DEFLECTIONS: int64
+  - CHARGES_DRAWN: int64
+  - SCREEN_ASSISTS: int64
+  - SCREEN_AST_PTS: int64
+  - OFF_LOOSE_BALLS_RECOVERED: int64
+  - DEF_LOOSE_BALLS_RECOVERED: int64
+  - LOOSE_BALLS_RECOVERED: int64
+  - PCT_LOOSE_BALLS_RECOVERED_OFF: float64
+  - PCT_LOOSE_BALLS_RECOVERED_DEF: float64
+  - OFF_BOXOUTS: int64
+  - DEF_BOXOUTS: int64
+  - BOX_OUT_PLAYER_TEAM_REBS: int64
+  - BOX_OUT_PLAYER_REBS: int64
+  - BOX_OUTS: int64
+  - PCT_BOX_OUTS_OFF: float64
+  - PCT_BOX_OUTS_DEF: float64
+  - PCT_BOX_OUTS_TEAM_REB: float64
+  - PCT_BOX_OUTS_REB: float64
+----------------------------------------
+   > Pinging Speed & Distance...
+
+### [TRACKING] SPEED & DISTANCE - Table 0 ###
+Row Count: 572
+Columns & Data Types:
+  - PLAYER_ID: int64
+  - PLAYER_NAME: object
+  - TEAM_ID: int64
+  - TEAM_ABBREVIATION: object
+  - GP: int64
+  - W: int64
+  - L: int64
+  - MIN: float64
+  - DIST_FEET: int64
+  - DIST_MILES: float64
+  - DIST_MILES_OFF: float64
+  - DIST_MILES_DEF: float64
+  - AVG_SPEED: float64
+  - AVG_SPEED_OFF: float64
+  - AVG_SPEED_DEF: float64
+----------------------------------------
+   > Pinging 5-Man Lineups...
+
+### [LINEUPS] 5-MAN LINEUPS - Table 0 ###
+Row Count: 2000
+Columns & Data Types:
+  - GROUP_SET: object
+  - GROUP_ID: object
+  - GROUP_NAME: object
+  - TEAM_ID: int64
+  - TEAM_ABBREVIATION: object
+  - GP: int64
+  - W: int64
+  - L: int64
+  - W_PCT: float64
+  - MIN: float64
+  - FGM: int64
+  - FGA: int64
+  - FG_PCT: float64
+  - FG3M: int64
+  - FG3A: int64
+  - FG3_PCT: float64
+  - FTM: int64
+  - FTA: int64
+  - FT_PCT: float64
+  - OREB: int64
+  - DREB: int64
+  - REB: int64
+  - AST: int64
+  - TOV: float64
+  - STL: int64
+  - BLK: int64
+  - BLKA: int64
+  - PF: int64
+  - PFD: int64
+  - PTS: int64
+  - PLUS_MINUS: float64
+  - GP_RANK: int64
+  - W_RANK: int64
+  - L_RANK: int64
+  - W_PCT_RANK: int64
+  - MIN_RANK: int64
+  - FGM_RANK: int64
+  - FGA_RANK: int64
+  - FG_PCT_RANK: int64
+  - FG3M_RANK: int64
+  - FG3A_RANK: int64
+  - FG3_PCT_RANK: int64
+  - FTM_RANK: int64
+  - FTA_RANK: int64
+  - FT_PCT_RANK: int64
+  - OREB_RANK: int64
+  - DREB_RANK: int64
+  - REB_RANK: int64
+  - AST_RANK: int64
+  - TOV_RANK: int64
+  - STL_RANK: int64
+  - BLK_RANK: int64
+  - BLKA_RANK: int64
+  - PF_RANK: int64
+  - PFD_RANK: int64
+  - PTS_RANK: int64
+  - PLUS_MINUS_RANK: int64
+  - SUM_TIME_PLAYED: int64
+----------------------------------------
+   > Pinging Play Type: Isolation...
+
+### [SYNERGY] PLAY TYPE: ISOLATION - Table 0 ###
+Row Count: 245
+Columns & Data Types:
+  - SEASON_ID: object
+  - PLAYER_ID: int64
+  - PLAYER_NAME: object
+  - TEAM_ID: int64
+  - TEAM_ABBREVIATION: object
+  - TEAM_NAME: object
+  - PLAY_TYPE: object
+  - TYPE_GROUPING: object
+  - PERCENTILE: float64
+  - GP: int64
+  - POSS_PCT: float64
+  - PPP: float64
+  - FG_PCT: float64
+  - FT_POSS_PCT: float64
+  - TOV_POSS_PCT: float64
+  - SF_POSS_PCT: float64
+  - PLUSONE_POSS_PCT: float64
+  - SCORE_POSS_PCT: float64
+  - EFG_PCT: float64
+  - POSS: int64
+  - PTS: int64
+  - FGM: int64
+  - FGA: int64
+  - FGMX: int64
+----------------------------------------
+   > Pinging Player Matchups...
+
+### [DEFENSE] PLAYER MATCHUPS - Table 0 ###
+Row Count: 139
+Columns & Data Types:
+  - gameId: object
+  - teamId: int64
+  - teamCity: object
+  - teamName: object
+  - teamTricode: object
+  - teamSlug: object
+  - personIdOff: int64
+  - firstNameOff: object
+  - familyNameOff: object
+  - nameIOff: object
+  - playerSlugOff: object
+  - positionOff: object
+  - commentOff: object
+  - jerseyNumOff: object
+  - personIdDef: int64
+  - firstNameDef: object
+  - familyNameDef: object
+  - nameIDef: object
+  - playerSlugDef: object
+  - jerseyNumDef: object
+  - matchupMinutes: object
+  - matchupMinutesSort: float64
+  - partialPossessions: float64
+  - percentageDefenderTotalTime: float64
+  - percentageOffensiveTotalTime: float64
+  - percentageTotalTimeBothOn: float64
+  - switchesOn: int64
+  - playerPoints: int64
+  - teamPoints: int64
+  - matchupAssists: int64
+  - matchupPotentialAssists: int64
+  - matchupTurnovers: int64
+  - matchupBlocks: int64
+  - matchupFieldGoalsMade: int64
+  - matchupFieldGoalsAttempted: int64
+  - matchupFieldGoalsPercentage: float64
+  - matchupThreePointersMade: int64
+  - matchupThreePointersAttempted: int64
+  - matchupThreePointersPercentage: float64
+  - helpBlocks: int64
+  - helpFieldGoalsMade: int64
+  - helpFieldGoalsAttempted: int64
+  - helpFieldGoalsPercentage: float64
+  - matchupFreeThrowsMade: int64
+  - matchupFreeThrowsAttempted: int64
+  - shootingFouls: int64
+----------------------------------------
+   > Pinging Clutch Stats...
+
+### [CLUTCH] CLUTCH STATS - Table 0 ###
+Row Count: 469
+Columns & Data Types:
+  - GROUP_SET: object
+  - PLAYER_ID: int64
+  - PLAYER_NAME: object
+  - NICKNAME: object
+  - TEAM_ID: int64
+  - TEAM_ABBREVIATION: object
+  - AGE: float64
+  - GP: int64
+  - W: int64
+  - L: int64
+  - W_PCT: float64
+  - MIN: float64
+  - FGM: int64
+  - FGA: int64
+  - FG_PCT: float64
+  - FG3M: int64
+  - FG3A: int64
+  - FG3_PCT: float64
+  - FTM: int64
+  - FTA: int64
+  - FT_PCT: float64
+  - OREB: int64
+  - DREB: int64
+  - REB: int64
+  - AST: int64
+  - TOV: int64
+  - STL: int64
+  - BLK: int64
+  - BLKA: int64
+  - PF: int64
+  - PFD: int64
+  - PTS: int64
+  - PLUS_MINUS: int64
+  - NBA_FANTASY_PTS: float64
+  - DD2: int64
+  - TD3: int64
+  - WNBA_FANTASY_PTS: float64
+  - GP_RANK: int64
+  - W_RANK: int64
+  - L_RANK: int64
+  - W_PCT_RANK: int64
+  - MIN_RANK: int64
+  - FGM_RANK: int64
+  - FGA_RANK: int64
+  - FG_PCT_RANK: int64
+  - FG3M_RANK: int64
+  - FG3A_RANK: int64
+  - FG3_PCT_RANK: int64
+  - FTM_RANK: int64
+  - FTA_RANK: int64
+  - FT_PCT_RANK: int64
+  - OREB_RANK: int64
+  - DREB_RANK: int64
+  - REB_RANK: int64
+  - AST_RANK: int64
+  - TOV_RANK: int64
+  - STL_RANK: int64
+  - BLK_RANK: int64
+  - BLKA_RANK: int64
+  - PF_RANK: int64
+  - PFD_RANK: int64
+  - PTS_RANK: int64
+  - PLUS_MINUS_RANK: int64
+  - NBA_FANTASY_PTS_RANK: int64
+  - DD2_RANK: int64
+  - TD3_RANK: int64
+  - WNBA_FANTASY_PTS_RANK: int64
+  - TEAM_COUNT: int64
+----------------------------------------
+   > Pinging Contextual Shooting...
+
+### [SHOTS] CONTEXTUAL SHOOTING - Table 0 ###
+Row Count: 0
+Columns & Data Types:
+  - PLAYER_ID: object
+  - PLAYER_NAME_LAST_FIRST: object
+  - SORT_ORDER: object
+  - GP: object
+  - G: object
+  - SHOT_TYPE: object
+  - FGA_FREQUENCY: object
+  - FGM: object
+  - FGA: object
+  - FG_PCT: object
+  - EFG_PCT: object
+  - FG2A_FREQUENCY: object
+  - FG2M: object
+  - FG2A: object
+  - FG2_PCT: object
+  - FG3A_FREQUENCY: object
+  - FG3M: object
+  - FG3A: object
+  - FG3_PCT: object
+----------------------------------------
+
+### [SHOTS] CONTEXTUAL SHOOTING - Table 1 ###
+Row Count: 0
+Columns & Data Types:
+  - PLAYER_ID: object
+  - PLAYER_NAME_LAST_FIRST: object
+  - SORT_ORDER: object
+  - GP: object
+  - G: object
+  - SHOT_TYPE: object
+  - FGA_FREQUENCY: object
+  - FGM: object
+  - FGA: object
+  - FG_PCT: object
+  - EFG_PCT: object
+  - FG2A_FREQUENCY: object
+  - FG2M: object
+  - FG2A: object
+  - FG2_PCT: object
+  - FG3A_FREQUENCY: object
+  - FG3M: object
+  - FG3A: object
+  - FG3_PCT: object
+----------------------------------------
+
+### [SHOTS] CONTEXTUAL SHOOTING - Table 2 ###
+Row Count: 0
+Columns & Data Types:
+  - PLAYER_ID: object
+  - PLAYER_NAME_LAST_FIRST: object
+  - SORT_ORDER: object
+  - GP: object
+  - G: object
+  - SHOT_CLOCK_RANGE: object
+  - FGA_FREQUENCY: object
+  - FGM: object
+  - FGA: object
+  - FG_PCT: object
+  - EFG_PCT: object
+  - FG2A_FREQUENCY: object
+  - FG2M: object
+  - FG2A: object
+  - FG2_PCT: object
+  - FG3A_FREQUENCY: object
+  - FG3M: object
+  - FG3A: object
+  - FG3_PCT: object
+----------------------------------------
+
+### [SHOTS] CONTEXTUAL SHOOTING - Table 3 ###
+Row Count: 0
+Columns & Data Types:
+  - PLAYER_ID: object
+  - PLAYER_NAME_LAST_FIRST: object
+  - SORT_ORDER: object
+  - GP: object
+  - G: object
+  - DRIBBLE_RANGE: object
+  - FGA_FREQUENCY: object
+  - FGM: object
+  - FGA: object
+  - FG_PCT: object
+  - EFG_PCT: object
+  - FG2A_FREQUENCY: object
+  - FG2M: object
+  - FG2A: object
+  - FG2_PCT: object
+  - FG3A_FREQUENCY: object
+  - FG3M: object
+  - FG3A: object
+  - FG3_PCT: object
+----------------------------------------
+
+### [SHOTS] CONTEXTUAL SHOOTING - Table 4 ###
+Row Count: 0
+Columns & Data Types:
+  - PLAYER_ID: object
+  - PLAYER_NAME_LAST_FIRST: object
+  - SORT_ORDER: object
+  - GP: object
+  - G: object
+  - CLOSE_DEF_DIST_RANGE: object
+  - FGA_FREQUENCY: object
+  - FGM: object
+  - FGA: object
+  - FG_PCT: object
+  - EFG_PCT: object
+  - FG2A_FREQUENCY: object
+  - FG2M: object
+  - FG2A: object
+  - FG2_PCT: object
+  - FG3A_FREQUENCY: object
+  - FG3M: object
+  - FG3A: object
+  - FG3_PCT: object
+----------------------------------------
+
+### [SHOTS] CONTEXTUAL SHOOTING - Table 5 ###
+Row Count: 0
+Columns & Data Types:
+  - PLAYER_ID: object
+  - PLAYER_NAME_LAST_FIRST: object
+  - SORT_ORDER: object
+  - GP: object
+  - G: object
+  - CLOSE_DEF_DIST_RANGE: object
+  - FGA_FREQUENCY: object
+  - FGM: object
+  - FGA: object
+  - FG_PCT: object
+  - EFG_PCT: object
+  - FG2A_FREQUENCY: object
+  - FG2M: object
+  - FG2A: object
+  - FG2_PCT: object
+  - FG3A_FREQUENCY: object
+  - FG3M: object
+  - FG3A: object
+  - FG3_PCT: object
+----------------------------------------
+
+### [SHOTS] CONTEXTUAL SHOOTING - Table 6 ###
+Row Count: 0
+Columns & Data Types:
+  - PLAYER_ID: object
+  - PLAYER_NAME_LAST_FIRST: object
+  - SORT_ORDER: object
+  - GP: object
+  - G: object
+  - TOUCH_TIME_RANGE: object
+  - FGA_FREQUENCY: object
+  - FGM: object
+  - FGA: object
+  - FG_PCT: object
+  - EFG_PCT: object
+  - FG2A_FREQUENCY: object
+  - FG2M: object
+  - FG2A: object
+  - FG2_PCT: object
+  - FG3A_FREQUENCY: object
+  - FG3M: object
+  - FG3A: object
+  - FG3_PCT: object
+----------------------------------------
+   > Pinging Game Rotation...
+
+### [ROTATION] GAME ROTATION - Table 0 ###
+Row Count: 39
+Columns & Data Types:
+  - GAME_ID: object
+  - TEAM_ID: int64
+  - TEAM_CITY: object
+  - TEAM_NAME: object
+  - PERSON_ID: int64
+  - PLAYER_FIRST: object
+  - PLAYER_LAST: object
+  - IN_TIME_REAL: float64
+  - OUT_TIME_REAL: float64
+  - PLAYER_PTS: int64
+  - PT_DIFF: float64
+  - USG_PCT: float64
+----------------------------------------
+
+### [ROTATION] GAME ROTATION - Table 1 ###
+Row Count: 25
+Columns & Data Types:
+  - GAME_ID: object
+  - TEAM_ID: int64
+  - TEAM_CITY: object
+  - TEAM_NAME: object
+  - PERSON_ID: int64
+  - PLAYER_FIRST: object
+  - PLAYER_LAST: object
+  - IN_TIME_REAL: float64
+  - OUT_TIME_REAL: float64
+  - PLAYER_PTS: int64
+  - PT_DIFF: float64
+  - USG_PCT: float64
+----------------------------------------
+   > Pinging League Opponent Shooting...
+
+### [OPPONENT] LEAGUE OPPONENT SHOOTING - Table 0 ###
+Row Count: 30
+Columns & Data Types:
+  - TEAM_ID: int64
+  - TEAM_NAME: object
+  - TEAM_ABBREVIATION: object
+  - GP: int64
+  - G: int64
+  - FGA_FREQUENCY: float64
+  - FGM: int64
+  - FGA: int64
+  - FG_PCT: float64
+  - EFG_PCT: float64
+  - FG2A_FREQUENCY: float64
+  - FG2M: int64
+  - FG2A: int64
+  - FG2_PCT: float64
+  - FG3A_FREQUENCY: float64
+  - FG3M: int64
+  - FG3A: int64
+  - FG3_PCT: float64
+----------------------------------------
