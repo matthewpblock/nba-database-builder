@@ -80,7 +80,9 @@ COLUMN_MAP = {
     'shot_result': ['shotResult'],
     'loc_x': ['xLegacy', 'LOC_X'],
     'loc_y': ['yLegacy', 'LOC_Y'],
-    'margin': ['pointsTotal', 'SCOREMARGIN']
+    'margin': ['pointsTotal', 'SCOREMARGIN'],
+    'score_home': ['scoreHome'],
+    'score_away': ['scoreAway']
 }
 
 def clean_existing_game(game_id):

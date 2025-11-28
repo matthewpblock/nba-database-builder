@@ -10,7 +10,7 @@ from logger_config import setup_logger
 
 # CONFIG
 DB_URL = 'sqlite:///nba_analysis.db'
-TARGET_SEASON = '2023-24'
+TARGET_SEASON = '2024-25'
 RETRY_PAUSE = 300  # Seconds to wait if API blocks us (5 Minutes)
 
 def get_season_schedule():

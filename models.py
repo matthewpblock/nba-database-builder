@@ -111,6 +111,8 @@ class PlayByPlay(Base):
     loc_x = Column(Integer)
     loc_y = Column(Integer)
     margin = Column(Integer)
+    score_home = Column(String(10))
+    score_away = Column(String(10))
 
 class HustleStats(Base):
     """

@@ -21,7 +21,7 @@ def check_database_health():
             except Exception:
                 print(f"   {t.ljust(20)}: (Table not found)")
 
-    # 2. The Nemesis Report (Fixed)
+    # 2. The Nemesis Report
     print(f"\n🛡️  The '{TARGET_PLAYER}' Nemesis Report")
     print("   (Who has guarded him the most, and how many points did he score?)")
     
@@ -31,8 +31,8 @@ def check_database_health():
         t.abbreviation as Team,
         COUNT(DISTINCT m.game_id) as Games_Faced,
         
-        -- SUM seconds, then divide by 60 to get Minutes
-        SUM(m.matchup_minutes) / 60.0 as Mins_Guarded,
+        -- FIX: Do NOT divide by 60. The column is already in minutes.
+        SUM(m.matchup_minutes) as Mins_Guarded,
         
         SUM(m.points_allowed) as Pts_Scored,
         SUM(m.matchup_ast) as Ast_Allowed,
@@ -54,7 +54,7 @@ def check_database_health():
       AND m.game_id = pgs_off.game_id
 
     WHERE off.full_name = '{TARGET_PLAYER}'
-      AND pgs_def.team_id != pgs_off.team_id -- <--- FILTER TEAMMATES
+      AND pgs_def.team_id != pgs_off.team_id
       
     GROUP BY def.full_name
     ORDER BY Mins_Guarded DESC
@@ -64,11 +64,10 @@ def check_database_health():
     try:
         df = pd.read_sql(query, engine)
         if not df.empty:
-            # Format to 1 decimal place
             df['Mins_Guarded'] = df['Mins_Guarded'].apply(lambda x: f"{x:.1f}")
             print(df.to_string(index=False))
         else:
-            print("   (No data found. If you just wiped the table, run ingestion again!)")
+            print("   (No data found. Try ingesting more games!)")
             
     except Exception as e:
         print(f"   ❌ Query Failed: {e}")

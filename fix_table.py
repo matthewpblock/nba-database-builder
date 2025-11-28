@@ -8,7 +8,7 @@ from logger_config import setup_logger
 DB_URL = 'sqlite:///nba_analysis.db'
 # --- Which table do you want to reset? ---
 # Options: 'player_matchups', 'player_game_stats', 'play_by_play', 'hustle_stats', 'game_rotations'
-TARGET_TABLE = 'player_matchups'
+TARGET_TABLE = 'play_by_play'
 
 def reset_table(table_name_to_reset):
     """

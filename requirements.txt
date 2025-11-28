@@ -4,3 +4,6 @@ nba_api
 sqlalchemy
 requests
 psycopg2-binary
+matplotlib
+seaborn
+scikit-learn
