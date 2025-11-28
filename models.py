@@ -169,6 +169,7 @@ class PlayerMatchups(Base):
     __tablename__ = 'player_matchups'
     
     game_id = Column(String(20), ForeignKey('games.game_id'), primary_key=True)
+    team_id = Column(Integer, ForeignKey('teams.team_id'))
     off_player_id = Column(Integer, ForeignKey('players.player_id'), primary_key=True)
     def_player_id = Column(Integer, ForeignKey('players.player_id'), primary_key=True)
     

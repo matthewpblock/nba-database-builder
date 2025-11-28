@@ -61,11 +61,17 @@ def run_season_ingest():
                 # Standard polite wait
                 time.sleep(1.5) 
                 
-            except (ReadTimeout, ConnectionError, JSONDecodeError):
+            except (ReadTimeout, ConnectionError, JSONDecodeError) as e:
                 attempts += 1
-                print(f"\n🛑 API LIMIT REACHED! Pausing script for {RETRY_PAUSE} seconds...")
-                print("   (Don't close the window, it will resume automatically)\n")
-                time.sleep(RETRY_PAUSE)
+                
+                # Implement incremental backoff: wait longer on the second failure.
+                # 1st failure: waits RETRY_PAUSE seconds.
+                # 2nd failure: waits RETRY_PAUSE * 2 seconds.
+                current_pause = RETRY_PAUSE * attempts
+                
+                print(f"\n🛑 API LIMIT/TIMEOUT on Game {game_id} (Attempt {attempts}). Pausing for {current_pause / 60:.1f} minutes...")
+                print(f"   (Don't close the window, it will resume automatically. Error: {e})\n")
+                time.sleep(current_pause)
             except Exception as e:
                 print(f"   ⚠️ Unexpected Critical Error on {game_id}: {e}")
                 break # Move to next game if it's a weird code error, not a network error
