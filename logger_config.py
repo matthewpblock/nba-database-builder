@@ -1,7 +1,7 @@
 import logging
 import sys
 
-LOG_FILE = 'nba_database_builder.log'
+LOG_FILE = 'reports/nba_database_builder.log'
 
 def setup_logger():
     """

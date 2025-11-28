@@ -159,7 +159,7 @@ def compare_models():
     plt.legend()
     plt.grid(True, alpha=0.3)
     
-    filename = "model_comparison.png"
+    filename = "reports/model_comparison.png"
     plt.savefig(filename)
     print(f"📈 Chart saved to: {filename}")
 
