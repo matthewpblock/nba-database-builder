@@ -134,7 +134,8 @@ def ingest_game(game_id, full_mode=True):
         
         df_clean.to_sql('player_game_stats', engine, if_exists='append', index=False)
         print(f"     ✅ Saved {len(df_clean)} player stats.")
-    except CRITICAL_ERRORS: raise # <--- SIGNAL TO STOP
+        time.sleep(0.6) # <--- ADD THIS
+    except CRITICAL_ERRORS: raise 
     except Exception as e: print(f"     ❌ Error fetching Box Scores: {e}")
 
     # --- 2. PLAY BY PLAY ---
@@ -146,6 +147,7 @@ def ingest_game(game_id, full_mode=True):
             df_pbp = df_pbp.drop_duplicates(subset=['event_num'])
             df_pbp.to_sql('play_by_play', engine, if_exists='append', index=False)
             print(f"     ✅ Saved {len(df_pbp)} events.")
+            time.sleep(0.6) # <--- ADD THIS
         except CRITICAL_ERRORS: raise
         except Exception as e: print(f"     ❌ Error fetching PBP: {e}")
 
@@ -157,6 +159,7 @@ def ingest_game(game_id, full_mode=True):
             df_hustle['game_id'] = game_id
             df_hustle.to_sql('hustle_stats', engine, if_exists='append', index=False)
             print(f"     ✅ Saved {len(df_hustle)} hustle records.")
+            time.sleep(0.6) # <--- ADD THIS
         except CRITICAL_ERRORS: raise
         except Exception as e: print(f"     ❌ Error fetching Hustle: {e}")
 
@@ -172,6 +175,7 @@ def ingest_game(game_id, full_mode=True):
             df_match = df_match.drop_duplicates(subset=['off_player_id', 'def_player_id'])
             df_match.to_sql('player_matchups', engine, if_exists='append', index=False)
             print(f"     ✅ Saved {len(df_match)} matchup records.")
+            time.sleep(0.6) # <--- ADD THIS
         except CRITICAL_ERRORS: raise
         except Exception as e: print(f"     ❌ Error fetching Matchups: {e}")
 
@@ -183,7 +187,9 @@ def ingest_game(game_id, full_mode=True):
             df_rot['game_id'] = game_id
             df_rot.to_sql('game_rotations', engine, if_exists='append', index=False)
             print(f"     ✅ Saved {len(df_rot)} rotation shifts.")
+            # No sleep needed here, we sleep at the end of the function
         except CRITICAL_ERRORS: raise
         except Exception as e: print(f"     ❌ Error fetching Rotations: {e}")
 
     print(f"🏁 Game {game_id} Complete.\n")
+    time.sleep(1.0)

@@ -9,7 +9,7 @@ from requests.exceptions import ReadTimeout, ConnectionError, JSONDecodeError
 # CONFIG
 DB_URL = 'sqlite:///nba_analysis.db'
 TARGET_SEASON = '2024-25'
-RETRY_PAUSE = 120  # Seconds to wait if API blocks us (2 Minutes)
+RETRY_PAUSE = 300  # Seconds to wait if API blocks us (5 Minutes)
 
 def get_season_schedule():
     print(f"📅 Fetching schedule for {TARGET_SEASON}...")
