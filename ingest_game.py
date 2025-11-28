@@ -1,6 +1,7 @@
 import pandas as pd
 import time
 from sqlalchemy import create_engine, text
+from requests.exceptions import ReadTimeout, ConnectionError, JSONDecodeError
 from nba_api.stats.endpoints import (
     boxscoretraditionalv3,
     boxscoreadvancedv3,
@@ -90,10 +91,9 @@ def clean_existing_game(game_id):
     with engine.connect() as conn:
         for table in tables:
             try:
-                # Force delete any rows for this game ID
                 conn.execute(text(f"DELETE FROM {table} WHERE game_id = :gid"), {'gid': game_id})
             except Exception:
-                pass # Table might not exist yet
+                pass
         conn.commit()
 
 def prepare_df(df, table_model):
@@ -112,8 +112,14 @@ def prepare_df(df, table_model):
 
 def ingest_game(game_id, full_mode=True):
     print(f"🏀 Ingesting Game {game_id}...")
+    
+    # Checkpoint: Wipe old data first
     clean_existing_game(game_id)
     
+    # CRITICAL: We want to catch 'normal' errors (like missing data) but 
+    # LET THROUGH 'critical' errors (like Timeouts) so the Manager script detects them.
+    CRITICAL_ERRORS = (ReadTimeout, ConnectionError, JSONDecodeError)
+
     # --- 1. BOX SCORES ---
     try:
         trad = boxscoretraditionalv3.BoxScoreTraditionalV3(game_id=game_id).get_data_frames()[0]
@@ -128,8 +134,8 @@ def ingest_game(game_id, full_mode=True):
         
         df_clean.to_sql('player_game_stats', engine, if_exists='append', index=False)
         print(f"     ✅ Saved {len(df_clean)} player stats.")
-    except Exception as e:
-        print(f"     ❌ Error fetching Box Scores: {e}")
+    except CRITICAL_ERRORS: raise # <--- SIGNAL TO STOP
+    except Exception as e: print(f"     ❌ Error fetching Box Scores: {e}")
 
     # --- 2. PLAY BY PLAY ---
     if full_mode:
@@ -137,16 +143,11 @@ def ingest_game(game_id, full_mode=True):
             pbp = playbyplayv3.PlayByPlayV3(game_id=game_id).get_data_frames()[0]
             df_pbp = prepare_df(pbp, PlayByPlay)
             df_pbp['game_id'] = game_id
-            
-            # --- FIX: DEDUPLICATE EVENTS ---
-            # API sometimes returns duplicate actionNumbers. We keep the first one.
             df_pbp = df_pbp.drop_duplicates(subset=['event_num'])
-            # -------------------------------
-
             df_pbp.to_sql('play_by_play', engine, if_exists='append', index=False)
             print(f"     ✅ Saved {len(df_pbp)} events.")
-        except Exception as e:
-             print(f"     ❌ Error fetching PBP: {e}")
+        except CRITICAL_ERRORS: raise
+        except Exception as e: print(f"     ❌ Error fetching PBP: {e}")
 
     # --- 3. HUSTLE STATS ---
     if full_mode:
@@ -156,8 +157,8 @@ def ingest_game(game_id, full_mode=True):
             df_hustle['game_id'] = game_id
             df_hustle.to_sql('hustle_stats', engine, if_exists='append', index=False)
             print(f"     ✅ Saved {len(df_hustle)} hustle records.")
-        except Exception as e:
-            print(f"     ❌ Error fetching Hustle: {e}")
+        except CRITICAL_ERRORS: raise
+        except Exception as e: print(f"     ❌ Error fetching Hustle: {e}")
 
     # --- 4. MATCHUPS ---
     if full_mode:
@@ -165,21 +166,14 @@ def ingest_game(game_id, full_mode=True):
             matchups = boxscorematchupsv3.BoxScoreMatchupsV3(game_id=game_id).get_data_frames()[0]
             df_match = prepare_df(matchups, PlayerMatchups)
             df_match['game_id'] = game_id
-            
-            # Filter bad rows
             df_match = df_match.dropna(subset=['off_player_id', 'def_player_id'])
             df_match['off_player_id'] = df_match['off_player_id'].astype(int)
             df_match['def_player_id'] = df_match['def_player_id'].astype(int)
-            
-            # --- FIX: DEDUPLICATE MATCHUPS ---
-            # Just in case duplicate matchup rows exist
             df_match = df_match.drop_duplicates(subset=['off_player_id', 'def_player_id'])
-            # ---------------------------------
-            
             df_match.to_sql('player_matchups', engine, if_exists='append', index=False)
             print(f"     ✅ Saved {len(df_match)} matchup records.")
-        except Exception as e:
-            print(f"     ❌ Error fetching Matchups: {e}")
+        except CRITICAL_ERRORS: raise
+        except Exception as e: print(f"     ❌ Error fetching Matchups: {e}")
 
     # --- 5. ROTATIONS ---
     if full_mode:
@@ -189,11 +183,7 @@ def ingest_game(game_id, full_mode=True):
             df_rot['game_id'] = game_id
             df_rot.to_sql('game_rotations', engine, if_exists='append', index=False)
             print(f"     ✅ Saved {len(df_rot)} rotation shifts.")
-        except Exception as e:
-            print(f"     ❌ Error fetching Rotations: {e}")
+        except CRITICAL_ERRORS: raise
+        except Exception as e: print(f"     ❌ Error fetching Rotations: {e}")
 
     print(f"🏁 Game {game_id} Complete.\n")
-    time.sleep(1.0)
-
-if __name__ == "__main__":
-    ingest_game('0042300301', full_mode=True)

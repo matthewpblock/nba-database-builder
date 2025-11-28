@@ -3,53 +3,38 @@ import sys
 import time
 from sqlalchemy import create_engine
 from nba_api.stats.endpoints import leaguegamefinder
-from ingest_game import ingest_game  # Import the worker we just built
+from ingest_game import ingest_game
+from requests.exceptions import ReadTimeout, ConnectionError, JSONDecodeError
 
 # CONFIG
 DB_URL = 'sqlite:///nba_analysis.db'
 TARGET_SEASON = '2024-25'
+RETRY_PAUSE = 120  # Seconds to wait if API blocks us (2 Minutes)
 
 def get_season_schedule():
     print(f"📅 Fetching schedule for {TARGET_SEASON}...")
-    
-    # LeagueID '00' = NBA (excludes G-League/WNBA)
-    # SeasonType 'Regular Season' (excludes Preseason/All-Star)
     finder = leaguegamefinder.LeagueGameFinder(
         league_id_nullable='00',
         season_nullable=TARGET_SEASON,
         season_type_nullable='Regular Season'
     )
-    
     df = finder.get_data_frames()[0]
-    
-    # Filter: Only keep completed games (Games with a "WL" result)
-    # This prevents us from trying to download games scheduled for tomorrow
     completed_games = df[df['WL'].notna()].copy()
-    
-    # Dedup: The API returns 2 rows per game (Home & Away). We only need the unique Game IDs.
     unique_game_ids = completed_games['GAME_ID'].unique().tolist()
-    
     print(f"   Found {len(unique_game_ids)} completed games so far.")
     return unique_game_ids
 
 def get_existing_games():
-    """Checks the database to see what we already have."""
     engine = create_engine(DB_URL)
     try:
-        # We check the 'games' table (or player_game_stats) for IDs
         existing = pd.read_sql("SELECT DISTINCT game_id FROM player_game_stats", engine)
         return existing['game_id'].tolist()
     except Exception:
         return []
 
 def run_season_ingest():
-    # 1. Get the "To Do" List
     schedule_ids = get_season_schedule()
-    
-    # 2. Get the "Done" List
     done_ids = get_existing_games()
-    
-    # 3. Calculate the difference
     missing_ids = [g for g in schedule_ids if g not in done_ids]
     
     if not missing_ids:
@@ -59,20 +44,31 @@ def run_season_ingest():
     print(f"🚀 Starting ingestion for {len(missing_ids)} new games...")
     print("-" * 50)
 
-    # 4. The Loop
+    # 4. The Smart Loop
     for i, game_id in enumerate(missing_ids):
-        print(f"[{i+1}/{len(missing_ids)}] Processing Game {game_id}...")
+        success = False
+        attempts = 0
         
-        try:
-            # Call the 'ingest_game' function from your other script
-            # full_mode=True gets PBP, Matchups, etc. Set to False for speed.
-            ingest_game(game_id, full_mode=True)
-            
-        except Exception as e:
-            print(f"   ⚠️ Failed to ingest {game_id}: {e}")
-        
-        # Sleep to avoid "API Jail" (Rate Limits)
-        time.sleep(1.5) 
+        # Retry up to 3 times for the same game
+        while not success and attempts < 3:
+            try:
+                print(f"[{i+1}/{len(missing_ids)}] Processing Game {game_id} (Attempt {attempts+1})...")
+                
+                # Run the Worker
+                ingest_game(game_id, full_mode=True)
+                success = True
+                
+                # Standard polite wait
+                time.sleep(1.5) 
+                
+            except (ReadTimeout, ConnectionError, JSONDecodeError):
+                attempts += 1
+                print(f"\n🛑 API LIMIT REACHED! Pausing script for {RETRY_PAUSE} seconds...")
+                print("   (Don't close the window, it will resume automatically)\n")
+                time.sleep(RETRY_PAUSE)
+            except Exception as e:
+                print(f"   ⚠️ Unexpected Critical Error on {game_id}: {e}")
+                break # Move to next game if it's a weird code error, not a network error
 
     print("\n✅ Season Ingestion Complete.")
 
