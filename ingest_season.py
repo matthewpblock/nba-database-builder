@@ -1,18 +1,20 @@
 import pandas as pd
 import sys
 import time
+import logging
 from sqlalchemy import create_engine
 from nba_api.stats.endpoints import leaguegamefinder
 from ingest_game import ingest_game
 from requests.exceptions import ReadTimeout, ConnectionError, JSONDecodeError
+from logger_config import setup_logger
 
 # CONFIG
 DB_URL = 'sqlite:///nba_analysis.db'
-TARGET_SEASON = '2024-25'
+TARGET_SEASON = '2023-24'
 RETRY_PAUSE = 300  # Seconds to wait if API blocks us (5 Minutes)
 
 def get_season_schedule():
-    print(f"📅 Fetching schedule for {TARGET_SEASON}...")
+    logging.info(f"Fetching schedule for {TARGET_SEASON}...")
     finder = leaguegamefinder.LeagueGameFinder(
         league_id_nullable='00',
         season_nullable=TARGET_SEASON,
@@ -21,7 +23,7 @@ def get_season_schedule():
     df = finder.get_data_frames()[0]
     completed_games = df[df['WL'].notna()].copy()
     unique_game_ids = completed_games['GAME_ID'].unique().tolist()
-    print(f"   Found {len(unique_game_ids)} completed games so far.")
+    logging.info(f"Found {len(unique_game_ids)} completed games for season.")
     return unique_game_ids
 
 def get_existing_games():
@@ -38,12 +40,11 @@ def run_season_ingest():
     missing_ids = [g for g in schedule_ids if g not in done_ids]
     
     if not missing_ids:
-        print("🎉 Your database is fully up to date! No new games to ingest.")
+        logging.info("Database is fully up to date. No new games to ingest.")
         return
 
-    print(f"🚀 Starting ingestion for {len(missing_ids)} new games...")
-    print("-" * 50)
-
+    logging.info(f"Starting ingestion for {len(missing_ids)} new games...")
+    
     # 4. The Smart Loop
     for i, game_id in enumerate(missing_ids):
         success = False
@@ -52,7 +53,7 @@ def run_season_ingest():
         # Retry up to 3 times for the same game
         while not success and attempts < 3:
             try:
-                print(f"[{i+1}/{len(missing_ids)}] Processing Game {game_id} (Attempt {attempts+1})...")
+                logging.info(f"[{i+1}/{len(missing_ids)}] Processing Game {game_id} (Attempt {attempts+1})...")
                 
                 # Run the Worker
                 ingest_game(game_id, full_mode=True)
@@ -69,14 +70,17 @@ def run_season_ingest():
                 # 2nd failure: waits RETRY_PAUSE * 2 seconds.
                 current_pause = RETRY_PAUSE * attempts
                 
-                print(f"\n🛑 API LIMIT/TIMEOUT on Game {game_id} (Attempt {attempts}). Pausing for {current_pause / 60:.1f} minutes...")
-                print(f"   (Don't close the window, it will resume automatically. Error: {e})\n")
+                logging.warning(f"API LIMIT/TIMEOUT on Game {game_id} (Attempt {attempts}). Pausing for {current_pause / 60:.1f} minutes...")
+                logging.warning(f"Pausing due to error: {e}")
                 time.sleep(current_pause)
             except Exception as e:
-                print(f"   ⚠️ Unexpected Critical Error on {game_id}: {e}")
+                logging.error(f"Unexpected Critical Error on {game_id}: {e}", exc_info=True)
                 break # Move to next game if it's a weird code error, not a network error
 
-    print("\n✅ Season Ingestion Complete.")
+    logging.info("Season Ingestion Complete.")
 
 if __name__ == "__main__":
+    setup_logger()
+    logging.info("--- Starting Seasonal Ingestion Run ---")
     run_season_ingest()
+    logging.info("--- Seasonal Ingestion Run Finished ---")

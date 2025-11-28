@@ -1,5 +1,6 @@
 import pandas as pd
 import time
+import logging
 from sqlalchemy import create_engine, text
 from requests.exceptions import ReadTimeout, ConnectionError, JSONDecodeError
 from nba_api.stats.endpoints import (
@@ -111,7 +112,7 @@ def prepare_df(df, table_model):
     return df_renamed[[c for c in df_renamed.columns if c in valid_db_cols]].copy()
 
 def ingest_game(game_id, full_mode=True):
-    print(f"🏀 Ingesting Game {game_id}...")
+    logging.info(f"Starting ingest for Game {game_id}...")
     
     # Checkpoint: Wipe old data first
     clean_existing_game(game_id)
@@ -133,10 +134,10 @@ def ingest_game(game_id, full_mode=True):
         df_clean['game_id'] = game_id 
         
         df_clean.to_sql('player_game_stats', engine, if_exists='append', index=False)
-        print(f"     ✅ Saved {len(df_clean)} player stats.")
+        logging.info(f"Saved {len(df_clean)} player stats for game {game_id}.")
         time.sleep(0.6) # <--- ADD THIS
     except CRITICAL_ERRORS: raise 
-    except Exception as e: print(f"     ❌ Error fetching Box Scores: {e}")
+    except Exception as e: logging.error(f"Error fetching Box Scores for {game_id}: {e}")
 
     # --- 2. PLAY BY PLAY ---
     if full_mode:
@@ -146,10 +147,10 @@ def ingest_game(game_id, full_mode=True):
             df_pbp['game_id'] = game_id
             df_pbp = df_pbp.drop_duplicates(subset=['event_num'])
             df_pbp.to_sql('play_by_play', engine, if_exists='append', index=False)
-            print(f"     ✅ Saved {len(df_pbp)} events.")
+            logging.info(f"Saved {len(df_pbp)} PBP events for game {game_id}.")
             time.sleep(0.6) # <--- ADD THIS
         except CRITICAL_ERRORS: raise
-        except Exception as e: print(f"     ❌ Error fetching PBP: {e}")
+        except Exception as e: logging.error(f"Error fetching PBP for {game_id}: {e}")
 
     # --- 3. HUSTLE STATS ---
     if full_mode:
@@ -158,10 +159,10 @@ def ingest_game(game_id, full_mode=True):
             df_hustle = prepare_df(hustle, HustleStats)
             df_hustle['game_id'] = game_id
             df_hustle.to_sql('hustle_stats', engine, if_exists='append', index=False)
-            print(f"     ✅ Saved {len(df_hustle)} hustle records.")
+            logging.info(f"Saved {len(df_hustle)} hustle records for game {game_id}.")
             time.sleep(0.6) # <--- ADD THIS
         except CRITICAL_ERRORS: raise
-        except Exception as e: print(f"     ❌ Error fetching Hustle: {e}")
+        except Exception as e: logging.error(f"Error fetching Hustle stats for {game_id}: {e}")
 
     # --- 4. MATCHUPS ---
     if full_mode:
@@ -174,10 +175,10 @@ def ingest_game(game_id, full_mode=True):
             df_match['def_player_id'] = df_match['def_player_id'].astype(int)
             df_match = df_match.drop_duplicates(subset=['off_player_id', 'def_player_id'])
             df_match.to_sql('player_matchups', engine, if_exists='append', index=False)
-            print(f"     ✅ Saved {len(df_match)} matchup records.")
+            logging.info(f"Saved {len(df_match)} matchup records for game {game_id}.")
             time.sleep(0.6) # <--- ADD THIS
         except CRITICAL_ERRORS: raise
-        except Exception as e: print(f"     ❌ Error fetching Matchups: {e}")
+        except Exception as e: logging.error(f"Error fetching Matchups for {game_id}: {e}")
 
     # --- 5. ROTATIONS ---
     if full_mode:
@@ -186,10 +187,10 @@ def ingest_game(game_id, full_mode=True):
             df_rot = prepare_df(rot, GameRotation)
             df_rot['game_id'] = game_id
             df_rot.to_sql('game_rotations', engine, if_exists='append', index=False)
-            print(f"     ✅ Saved {len(df_rot)} rotation shifts.")
+            logging.info(f"Saved {len(df_rot)} rotation shifts for game {game_id}.")
             # No sleep needed here, we sleep at the end of the function
         except CRITICAL_ERRORS: raise
-        except Exception as e: print(f"     ❌ Error fetching Rotations: {e}")
+        except Exception as e: logging.error(f"Error fetching Rotations for {game_id}: {e}")
 
-    print(f"🏁 Game {game_id} Complete.\n")
+    logging.info(f"Finished ingest for Game {game_id}.")
     time.sleep(1.0)
