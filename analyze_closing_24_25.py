@@ -126,8 +126,8 @@ def analyze_closing():
     plt.title("2024-25 Closing Ability: Q3 Lead vs Final Margin")
     plt.xlabel("Lead/Deficit after Q3"); plt.ylabel("Final Margin")
     plt.legend(); plt.grid(True, alpha=0.2)
-    plt.savefig("closing_analysis_2025.png")
-    print(f"\n📈 Chart saved to: closing_analysis_2025.png")
+    plt.savefig("reports/closing_analysis_2024_25.png")
+    print(f"\n📈 Chart saved to: reports/closing_analysis_2024_25.png")
 
 if __name__ == "__main__":
     analyze_closing()

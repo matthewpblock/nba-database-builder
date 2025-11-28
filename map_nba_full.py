@@ -17,7 +17,7 @@ from nba_api.stats.endpoints import (
 )
 
 # OUTPUT FILE NAME
-FILE_NAME = "nba_api_comprehensive_map.txt"
+FILE_NAME = "reports/nba_api_comprehensive_map.txt"
 
 # SAMPLE IDs (Using Lebron and Celtics for robust data)
 SAMPLE_GAME_ID = '0022300001' 

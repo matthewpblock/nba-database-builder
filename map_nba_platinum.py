@@ -32,7 +32,7 @@ from nba_api.stats.endpoints import (
     leaguedashoppptshot
 )
 
-FILE_NAME = "nba_api_platinum_map.txt"
+FILE_NAME = "reports/nba_api_platinum_map.txt"
 
 # CONFIG
 SAMPLE_GAME_ID = '0042300301' 

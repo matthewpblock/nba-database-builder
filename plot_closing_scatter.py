@@ -98,7 +98,7 @@ def plot_closing_scatter():
         plt.xlim(-40, 40)
         plt.ylim(-40, 40)
         
-        filename = "closing_scatter_check.png"
+        filename = "reports/closing_scatter_check_2024_25.png"
         plt.savefig(filename)
         print(f"   ✅ Scatterplot saved to: {filename}")
         

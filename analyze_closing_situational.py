@@ -159,8 +159,8 @@ def analyze_situational():
 
     plt.suptitle("Team Closing Shapes vs. League Baseline (2024-25)", fontsize=20, y=1.01)
     plt.tight_layout()
-    plt.savefig("closing_shapes.png")
-    print("✅ Shape Grid saved to: closing_shapes.png")
+    plt.savefig("reports/closing_shapes_2024_25.png")
+    print("✅ Shape Grid saved to: reports/closing_shapes_2024_25.png")
 
 if __name__ == "__main__":
     analyze_situational()

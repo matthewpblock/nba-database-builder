@@ -1,10 +1,11 @@
 import pandas as pd
 import time
-import sys
+import logging
 from sqlalchemy import create_engine, text
 from requests.exceptions import ReadTimeout, ConnectionError, JSONDecodeError
 from nba_api.stats.endpoints import leaguegamefinder, playbyplayv3
 from models import PlayByPlay
+from logger_config import setup_logger
 
 # CONFIG
 DB_URL = 'sqlite:///nba_analysis.db'
@@ -58,16 +59,16 @@ def clean_pbp(game_id, engine):
             pass
 
 def ingest_pbp_single(game_id, engine):
-    print(f"⚡ Ingesting PBP for {game_id}...", end=" ")
+    logging.info(f"⚡ Ingesting PBP for {game_id}...")
     
     clean_pbp(game_id, engine)
     
     try:
         # Fetch Data
-        pbp = playbyplayv3.PlayByPlayV3(game_id=game_id, timeout=30).get_data_frames()[0]
+        pbp = playbyplayv3.PlayByPlayV3(game_id=game_id, timeout=45).get_data_frames()[0]
         
         if pbp.empty:
-            print("❌ Empty Data.")
+            logging.warning(f"No PBP data returned for {game_id}.")
             return
 
         # Prepare Data
@@ -79,16 +80,16 @@ def ingest_pbp_single(game_id, engine):
         
         # Save
         df_pbp.to_sql('play_by_play', engine, if_exists='append', index=False)
-        print(f"✅ Saved {len(df_pbp)} rows.")
+        logging.info(f"   ✅ Saved {len(df_pbp)} rows for {game_id}.")
         
     except (ReadTimeout, ConnectionError, JSONDecodeError) as e:
-        print("🛑 TIMEOUT.")
+        logging.warning(f"Timeout/Connection Error on {game_id}.")
         raise e # Re-raise to trigger the pause in the main loop
     except Exception as e:
-        print(f"⚠️ Error: {e}")
+        logging.error(f"Unexpected error on {game_id}: {e}", exc_info=True)
 
 def get_todo_list(engine):
-    print(f"📅 Fetching {TARGET_SEASON} schedule...")
+    logging.info(f"📅 Fetching {TARGET_SEASON} schedule...")
     finder = leaguegamefinder.LeagueGameFinder(
         league_id_nullable='00',
         season_nullable=TARGET_SEASON,
@@ -108,7 +109,7 @@ def get_todo_list(engine):
         done_ids = set()
         
     missing = sorted(list(target_ids - done_ids))
-    print(f"   Total Games: {len(target_ids)} | Already Done: {len(done_ids)} | To Do: {len(missing)}")
+    logging.info(f"Total Games: {len(target_ids)} | Already Done: {len(done_ids)} | To Do: {len(missing)}")
     return missing
 
 def run_fast_ingest():
@@ -116,12 +117,12 @@ def run_fast_ingest():
     missing_ids = get_todo_list(engine)
     
     if not missing_ids:
-        print("🎉 All caught up!")
+        logging.info("🎉 All PBP data is up to date!")
         return
 
-    print("-" * 50)
+    logging.info(f"--- Starting FAST PBP Ingest for {len(missing_ids)} games ---")
     
-    for i, game_id in enumerate(missing_ids):
+    for i, game_id in enumerate(missing_ids, 1):
         success = False
         attempts = 0
         
@@ -133,9 +134,16 @@ def run_fast_ingest():
                 
             except (ReadTimeout, ConnectionError, JSONDecodeError):
                 attempts += 1
-                print(f"\n🛑 API Limit hit! Pausing for {RETRY_PAUSE}s...")
-                time.sleep(RETRY_PAUSE)
-                print("   Resuming...")
+                # Incremental backoff: wait longer after each failure
+                if attempts < 3:
+                    current_pause = RETRY_PAUSE * attempts
+                    logging.warning(f"API Limit hit on attempt {attempts}! Pausing for {current_pause}s...")
+                    time.sleep(current_pause)
+                    logging.info("Resuming...")
+                else:
+                    logging.error(f"Failed to ingest {game_id} after 3 attempts. Skipping.")
 
 if __name__ == "__main__":
+    setup_logger()
     run_fast_ingest()
+    logging.info("--- Fast PBP Ingestion Run Finished ---")
