@@ -102,19 +102,43 @@ def analyze_situational():
     
     df['Situation'] = pd.cut(df['Q3_Lead'], bins=bins, labels=labels)
 
+    # --- PLOT 0: LEAGUE-WIDE OVERVIEW ---
+    plt.figure(figsize=(12, 8))
+    sns.regplot(
+        data=df, 
+        x='Q3_Lead', 
+        y='Final_Result', 
+        order=3,  # Polynomial degree 3
+        ci=None,  # Don't show confidence interval
+        line_kws={'color': 'red', 'label': 'League Trend (Poly D3)', 'linewidth': 2.5},
+        scatter_kws={'alpha': 0.1, 'color': 'gray'}
+    )
+    plt.plot([-40, 40], [-40, 40], color='blue', linestyle='--', alpha=0.5, label='Lead Maintained (y=x)')
+    plt.axhline(0, color='k', linewidth=0.5, linestyle='-')
+    plt.axvline(0, color='k', linewidth=0.5, linestyle='-')
+    plt.title("League-Wide Closing Ability: Q3 Lead vs. Final Margin (2024-25)")
+    plt.xlabel("Lead/Deficit at End of Q3")
+    plt.ylabel("Final Margin")
+    plt.grid(True, alpha=0.2)
+    plt.legend()
+    plt.xlim(-30, 30)
+    plt.ylim(-30, 30)
+    plt.savefig("reports/closing_league_overview_2024_25.png")
+    print("✅ League overview chart saved to: reports/closing_league_overview_2024_25.png")
+
     # 3. GENERATE HEATMAP DATA
     heatmap_data = df.groupby(['Team', 'Situation'], observed=False)['Performance_Vs_Avg'].mean().unstack()
     heatmap_data = heatmap_data.sort_values('Close Game\n(-6 to +6)', ascending=False)
 
     # --- PLOT 1: HEATMAP ---
-    plt.figure(figsize=(12, 12))
+    plt.figure(figsize=(12, 10))
     sns.heatmap(heatmap_data, annot=True, fmt=".1f", cmap="RdYlGn", center=0, linewidths=.5)
     plt.title("Team Closing 'Personality': Points Gained/Lost vs. League Average")
     plt.xlabel("Situation at End of Q3")
     plt.ylabel("Team")
     plt.tight_layout()
-    plt.savefig("closing_heatmap.png")
-    print("✅ Heatmap saved to: closing_heatmap.png")
+    plt.savefig("reports/closing_heatmap_2024_25.png")
+    print("✅ Heatmap saved to: reports/closing_heatmap_2024_25.png")
 
     # --- PLOT 2: SHAPE GRID ---
     teams = sorted(df['Team'].unique())

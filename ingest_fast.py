@@ -89,15 +89,35 @@ def ingest_pbp_single(game_id, engine):
         logging.error(f"Unexpected error on {game_id}: {e}", exc_info=True)
 
 def get_todo_list(engine):
-    logging.info(f"📅 Fetching {TARGET_SEASON} schedule...")
-    finder = leaguegamefinder.LeagueGameFinder(
-        league_id_nullable='00',
-        season_nullable=TARGET_SEASON,
-        season_type_nullable='Regular Season'
-    )
-    all_games = finder.get_data_frames()[0]
+    print(f"📅 Fetching {TARGET_SEASON} complete schedule (Reg + Playoffs)...")
     
-    # Filter for completed games
+    # --- UPDATED LOGIC TO CATCH PLAYOFFS ---
+    season_types = ['Regular Season', 'Playoffs', 'PlayIn']
+    all_dfs = []
+    
+    for s_type in season_types:
+        try:
+            finder = leaguegamefinder.LeagueGameFinder(
+                league_id_nullable='00',
+                season_nullable=TARGET_SEASON,
+                season_type_nullable=s_type
+            )
+            df = finder.get_data_frames()[0]
+            if not df.empty:
+                print(f"   Found {len(df)} games for {s_type}.")
+                all_dfs.append(df)
+        except Exception:
+            # It's normal for Playoffs to be empty early in the season
+            pass
+
+    if not all_dfs:
+        print("❌ Critical Error: Could not find any games via API.")
+        return []
+
+    # Combine all season types
+    all_games = pd.concat(all_dfs, ignore_index=True)
+    
+    # Filter for completed games (Games with a W/L result)
     completed = all_games[all_games['WL'].notna()].copy()
     target_ids = set(completed['GAME_ID'].unique())
     
@@ -109,9 +129,9 @@ def get_todo_list(engine):
         done_ids = set()
         
     missing = sorted(list(target_ids - done_ids))
-    logging.info(f"Total Games: {len(target_ids)} | Already Done: {len(done_ids)} | To Do: {len(missing)}")
+    print(f"   Total Games: {len(target_ids)} | Already Done: {len(done_ids)} | To Do: {len(missing)}")
     return missing
-
+    
 def run_fast_ingest():
     engine = get_db_engine()
     missing_ids = get_todo_list(engine)
